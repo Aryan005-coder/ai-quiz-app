@@ -53,6 +53,7 @@ fun QuizGeneratorScreen() {
     var numQuestions by remember { mutableStateOf("") }
     var difficulty by remember { mutableStateOf("Easy") }
     var generatedQuiz by remember { mutableStateOf("") }
+    var suggestedCourse by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
@@ -128,8 +129,9 @@ fun QuizGeneratorScreen() {
                 } else {
                     errorMessage = ""
                     isLoading = true
-                    generateQuiz(topic, numQuestions, difficulty) { result ->
-                        generatedQuiz = result
+                    generateQuizWithCourse(topic, numQuestions, difficulty) { quizResult, courseResult ->
+                        generatedQuiz = quizResult
+                        suggestedCourse = courseResult
                         isLoading = false
                     }
                 }
@@ -154,7 +156,32 @@ fun QuizGeneratorScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        if (suggestedCourse.isNotEmpty()) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Recommended Course to Study:",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 18.sp,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = suggestedCourse,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 16.sp
+                    )
+                }
+            }
+        }
+
         if (generatedQuiz.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -222,11 +249,27 @@ fun DifficultyDropdown(selected: String, onSelected: (String) -> Unit) {
 // --- API Key ---
 private const val API_KEY = "AIzaSyDwKHmNRal-a4bNu_EsvElinzdPD2yi9ts"
 
-// --- Quiz Generator Function ---
-fun generateQuiz(topic: String, numQuestions: String, difficulty: String, onResult: (String) -> Unit) {
+// --- Quiz Generator Function with Course Suggestions ---
+fun generateQuizWithCourse(
+    topic: String,
+    numQuestions: String,
+    difficulty: String,
+    onResult: (String, String) -> Unit
+) {
     val client = OkHttpClient()
 
-    val prompt = "Generate $numQuestions $difficulty difficulty quiz questions with answers on \"$topic\"."
+    val prompt = """
+        Generate $numQuestions $difficulty difficulty quiz questions with answers on "$topic". 
+        
+        Then, suggest a specific course or learning resource that would help students prepare for this quiz.
+        Format your response as follows:
+        
+        QUIZ:
+        [Quiz questions and answers here]
+        
+        RECOMMENDED COURSE:
+        [Course name and brief description here]
+    """.trimIndent()
 
     val json = JSONObject().apply {
         put("contents", JSONArray().put(
@@ -258,7 +301,7 @@ fun generateQuiz(topic: String, numQuestions: String, difficulty: String, onResu
     client.newCall(request).enqueue(object : Callback {
         override fun onFailure(call: Call, e: IOException) {
             CoroutineScope(Dispatchers.Main).launch {
-                onResult("Failed: ${e.localizedMessage}")
+                onResult("Failed: ${e.localizedMessage}", "")
             }
         }
 
@@ -274,21 +317,47 @@ fun generateQuiz(topic: String, numQuestions: String, difficulty: String, onResu
                             val jsonObj = JSONObject(responseBody)
                             val content = jsonObj.getJSONArray("candidates")
                                 .getJSONObject(0)
-                                .getJSONObject("content") // ✅ corrected here
+                                .getJSONObject("content")
                                 .getJSONArray("parts")
                                 .getJSONObject(0)
                                 .getString("text")
-                            onResult(content)
+
+                            // Split the content into quiz and course sections
+                            val sections = processCourseAndQuiz(content)
+                            onResult(sections.first, sections.second)
                         } catch (e: Exception) {
-                            onResult("Error parsing response: ${e.message}\n\nResponse: $responseBody")
+                            onResult("Error parsing response: ${e.message}\n\nResponse: $responseBody", "")
                         }
                     } else {
-                        onResult("Empty response")
+                        onResult("Empty response", "")
                     }
                 } else {
-                    onResult("Error ${response.code}: $responseBody")
+                    onResult("Error ${response.code}: $responseBody", "")
                 }
             }
         }
     })
+}
+
+// Helper function to process the response and extract the quiz and course sections
+fun processCourseAndQuiz(content: String): Pair<String, String> {
+    val quizSectionStart = content.indexOf("QUIZ:")
+    val recommendedCourseStart = content.indexOf("RECOMMENDED COURSE:")
+
+    // Handle cases where the markers aren't found
+    if (quizSectionStart == -1 || recommendedCourseStart == -1) {
+        // If we can't find the markers, just return the full content as quiz and empty string as course
+        return Pair(content, "")
+    }
+
+    val quizContent = content.substring(
+        quizSectionStart + 5,
+        recommendedCourseStart
+    ).trim()
+
+    val courseContent = content.substring(
+        recommendedCourseStart + 19
+    ).trim()
+
+    return Pair(quizContent, courseContent)
 }
