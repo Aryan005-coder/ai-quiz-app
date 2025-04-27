@@ -1,0 +1,294 @@
+package com.example.quizgenerator
+
+// --- Imports ---
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.quizgenerator.ui.theme.QuizGeneratorTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
+
+// --- Main Activity ---
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            QuizGeneratorTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    QuizGeneratorScreen()
+                }
+            }
+        }
+    }
+}
+
+// --- Composable: Quiz Generator Screen ---
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun QuizGeneratorScreen() {
+    var topic by remember { mutableStateOf("") }
+    var numQuestions by remember { mutableStateOf("") }
+    var difficulty by remember { mutableStateOf("Easy") }
+    var generatedQuiz by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.primary,
+                        MaterialTheme.colorScheme.primaryContainer
+                    )
+                )
+            )
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "AI Quiz Generator",
+            fontSize = 28.sp,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        OutlinedTextField(
+            value = topic,
+            onValueChange = { topic = it },
+            label = { Text("Topic") },
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onSurface
+            )
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = numQuestions,
+            onValueChange = {
+                if (it.isEmpty() || it.all { char -> char.isDigit() }) {
+                    numQuestions = it
+                }
+            },
+            label = { Text("Number of Questions") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onSurface
+            )
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        DifficultyDropdown(selected = difficulty) { difficulty = it }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = {
+                if (topic.isBlank()) {
+                    errorMessage = "Please enter a topic"
+                } else if (numQuestions.isBlank()) {
+                    errorMessage = "Please enter number of questions"
+                } else {
+                    errorMessage = ""
+                    isLoading = true
+                    generateQuiz(topic, numQuestions, difficulty) { result ->
+                        generatedQuiz = result
+                        isLoading = false
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isLoading
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.size(24.dp)
+                )
+            } else {
+                Text("Generate Quiz")
+            }
+        }
+
+        if (errorMessage.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = errorMessage, color = MaterialTheme.colorScheme.error)
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        if (generatedQuiz.isNotEmpty()) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = generatedQuiz,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 16.sp
+                    )
+                }
+            }
+        }
+    }
+}
+
+// --- Difficulty Dropdown ---
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DifficultyDropdown(selected: String, onSelected: (String) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    val options = listOf("Easy", "Medium", "Hard", "Expert")
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded }
+    ) {
+        OutlinedTextField(
+            value = selected,
+            onValueChange = {},
+            readOnly = true,
+            label = { Text("Difficulty") },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onSurface
+            )
+        )
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.exposedDropdownSize()
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        onSelected(option)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+// --- API Key ---
+private const val API_KEY = "AIzaSyDwKHmNRal-a4bNu_EsvElinzdPD2yi9ts"
+
+// --- Quiz Generator Function ---
+fun generateQuiz(topic: String, numQuestions: String, difficulty: String, onResult: (String) -> Unit) {
+    val client = OkHttpClient()
+
+    val prompt = "Generate $numQuestions $difficulty difficulty quiz questions with answers on \"$topic\"."
+
+    val json = JSONObject().apply {
+        put("contents", JSONArray().put(
+            JSONObject().apply {
+                put("role", "user")
+                put("parts", JSONArray().put(
+                    JSONObject().apply {
+                        put("text", prompt)
+                    }
+                ))
+            }
+        ))
+        put("generationConfig", JSONObject().apply {
+            put("temperature", 0.7)
+            put("maxOutputTokens", 2000)
+        })
+    }
+
+    val requestBody = json.toString().toRequestBody("application/json".toMediaTypeOrNull())
+
+    println("Gemini Request: ${json.toString()}")
+
+    val request = Request.Builder()
+        .url("https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=$API_KEY")
+        .header("Content-Type", "application/json")
+        .post(requestBody)
+        .build()
+
+    client.newCall(request).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            CoroutineScope(Dispatchers.Main).launch {
+                onResult("Failed: ${e.localizedMessage}")
+            }
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            CoroutineScope(Dispatchers.Main).launch {
+                val responseBody = response.body?.string()
+                println("Response Code: ${response.code}")
+                println("Response Body: $responseBody")
+
+                if (response.isSuccessful) {
+                    if (responseBody != null) {
+                        try {
+                            val jsonObj = JSONObject(responseBody)
+                            val content = jsonObj.getJSONArray("candidates")
+                                .getJSONObject(0)
+                                .getJSONObject("content") // ✅ corrected here
+                                .getJSONArray("parts")
+                                .getJSONObject(0)
+                                .getString("text")
+                            onResult(content)
+                        } catch (e: Exception) {
+                            onResult("Error parsing response: ${e.message}\n\nResponse: $responseBody")
+                        }
+                    } else {
+                        onResult("Empty response")
+                    }
+                } else {
+                    onResult("Error ${response.code}: $responseBody")
+                }
+            }
+        }
+    })
+}
