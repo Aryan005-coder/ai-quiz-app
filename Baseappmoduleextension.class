@@ -1,0 +1,257 @@
+// IntelliJ API Decompiler stub source generated from a class file
+// Implementation of methods is not available
+
+package com.android.build.gradle.internal.dsl
+
+public open class BaseAppModuleExtension public constructor(dslServices: com.android.build.gradle.internal.services.DslServices, bootClasspathConfig: com.android.build.gradle.internal.tasks.factory.BootClasspathConfig, buildOutputs: org.gradle.api.NamedDomainObjectContainer<com.android.build.gradle.api.BaseVariantOutput>, sourceSetManager: com.android.build.gradle.internal.dependency.SourceSetManager, extraModelInfo: com.android.build.gradle.internal.ExtraModelInfo, publicExtensionImpl: com.android.build.gradle.internal.dsl.ApplicationExtensionImpl, stats: com.google.wireless.android.sdk.stats.GradleBuildProject.Builder?) : com.android.build.gradle.AppExtension, com.android.build.gradle.internal.dsl.InternalApplicationExtension {
+    public open val aaptOptions: com.android.build.gradle.internal.dsl.AaptOptions /* compiled code */
+
+    public open val adbOptions: com.android.build.gradle.internal.dsl.AdbOptions /* compiled code */
+
+    public open val androidResources: com.android.build.api.dsl.ApplicationAndroidResources /* compiled code */
+        public open get
+
+    public open val assetPacks: kotlin.collections.MutableSet<kotlin.String> /* compiled code */
+
+    public open val buildFeatures: com.android.build.api.dsl.ApplicationBuildFeatures /* compiled code */
+        public open get
+
+    public open val buildToolsRevision: com.android.repository.Revision /* compiled code */
+        public open get
+
+    public open var buildToolsVersion: kotlin.String /* compiled code */
+
+    public open val buildTypes: org.gradle.api.NamedDomainObjectContainer<com.android.build.gradle.internal.dsl.BuildType> /* compiled code */
+        public open get
+
+    public open val bundle: com.android.build.gradle.internal.dsl.BundleOptions /* compiled code */
+
+    public open val compileOptions: com.android.build.gradle.internal.CompileOptions /* compiled code */
+
+    public open var compileSdk: kotlin.Int? /* compiled code */
+        public open @org.gradle.declarative.dsl.model.annotations.Restricted get
+
+    public open var compileSdkExtension: kotlin.Int? /* compiled code */
+
+    public open var compileSdkPreview: kotlin.String? /* compiled code */
+
+    public open var compileSdkVersion: kotlin.String? /* compiled code */
+
+    public open val composeOptions: com.android.build.api.dsl.ComposeOptions /* compiled code */
+
+    public open val dataBinding: com.android.build.gradle.internal.dsl.DataBindingOptions /* compiled code */
+
+    public open val defaultConfig: com.android.build.gradle.internal.dsl.DefaultConfig /* compiled code */
+        public open get
+
+    public open val dependenciesInfo: com.android.build.api.dsl.DependenciesInfo /* compiled code */
+
+    public open val dynamicFeatures: kotlin.collections.MutableSet<kotlin.String> /* compiled code */
+
+    public open val experimentalProperties: kotlin.collections.MutableMap<kotlin.String, kotlin.Any> /* compiled code */
+        public open @org.gradle.api.Incubating get
+
+    public open val externalNativeBuild: com.android.build.gradle.internal.dsl.ExternalNativeBuild /* compiled code */
+
+    public open val flavorDimensionList: kotlin.collections.MutableList<kotlin.String> /* compiled code */
+        public open get
+
+    public open val flavorDimensions: kotlin.collections.MutableList<kotlin.String> /* compiled code */
+
+    public open val installation: com.android.build.api.dsl.ApplicationInstallation /* compiled code */
+
+    public open val jacoco: com.android.build.gradle.internal.coverage.JacocoOptions /* compiled code */
+
+    public open val libraryRequests: kotlin.collections.MutableCollection<com.android.builder.core.LibraryRequest> /* compiled code */
+        public open get
+
+    public open val lint: com.android.build.api.dsl.Lint /* compiled code */
+
+    public open val lintOptions: com.android.build.gradle.internal.dsl.LintOptions /* compiled code */
+
+    public open var namespace: kotlin.String? /* compiled code */
+        public open @org.gradle.declarative.dsl.model.annotations.Restricted get
+
+    public open var ndkPath: kotlin.String? /* compiled code */
+
+    public open var ndkVersion: kotlin.String /* compiled code */
+
+    public open val packaging: com.android.build.api.dsl.Packaging /* compiled code */
+
+    public open val packagingOptions: com.android.build.gradle.internal.dsl.PackagingOptions /* compiled code */
+
+    public open val privacySandbox: com.android.build.api.dsl.PrivacySandbox /* compiled code */
+
+    public open val productFlavors: org.gradle.api.NamedDomainObjectContainer<com.android.build.gradle.internal.dsl.ProductFlavor> /* compiled code */
+        public open get
+
+    private final val publicExtensionImpl: com.android.build.gradle.internal.dsl.ApplicationExtensionImpl /* compiled code */
+
+    public open val publishing: com.android.build.api.dsl.ApplicationPublishing /* compiled code */
+
+    public open var resourcePrefix: kotlin.String? /* compiled code */
+
+    public open val sdkComponents: com.android.build.api.dsl.SdkComponents /* compiled code */
+        public open @kotlin.Deprecated get
+
+    public open val signingConfigs: org.gradle.api.NamedDomainObjectContainer<com.android.build.gradle.internal.dsl.SigningConfig> /* compiled code */
+
+    public open val sourceSets: org.gradle.api.NamedDomainObjectContainer<com.android.build.gradle.api.AndroidSourceSet> /* compiled code */
+        public open get
+
+    public open val splits: com.android.build.gradle.internal.dsl.Splits /* compiled code */
+
+    public open var testBuildType: kotlin.String /* compiled code */
+
+    public open val testCoverage: com.android.build.api.dsl.TestCoverage /* compiled code */
+
+    public open val testFixtures: com.android.build.api.dsl.TestFixtures /* compiled code */
+        public open @org.gradle.api.Incubating get
+
+    public open var testNamespace: kotlin.String? /* compiled code */
+
+    public open val testOptions: com.android.build.gradle.internal.dsl.TestOptions /* compiled code */
+
+    public open val viewBinding: com.android.build.gradle.internal.dsl.ViewBindingOptionsImpl /* compiled code */
+
+    @kotlin.Deprecated public open fun aaptOptions(action: com.android.build.api.dsl.AaptOptions.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun aaptOptions(action: org.gradle.api.Action<com.android.build.gradle.internal.dsl.AaptOptions>): kotlin.Unit { /* compiled code */ }
+
+    @kotlin.Deprecated public open fun adbOptions(action: com.android.build.api.dsl.AdbOptions.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun adbOptions(action: org.gradle.api.Action<com.android.build.gradle.internal.dsl.AdbOptions>): kotlin.Unit { /* compiled code */ }
+
+    public open fun androidResources(action: com.android.build.api.dsl.ApplicationAndroidResources.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun androidResources(action: org.gradle.api.Action<com.android.build.api.dsl.ApplicationAndroidResources>): kotlin.Unit { /* compiled code */ }
+
+    @org.gradle.declarative.dsl.model.annotations.Configuring public open fun buildFeatures(action: com.android.build.api.dsl.ApplicationBuildFeatures.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun buildFeatures(action: org.gradle.api.Action<com.android.build.api.dsl.ApplicationBuildFeatures>): kotlin.Unit { /* compiled code */ }
+
+    @kotlin.Deprecated public open fun buildToolsVersion(buildToolsVersion: kotlin.String): kotlin.Unit { /* compiled code */ }
+
+    public open fun buildTypes(action: org.gradle.api.Action<in org.gradle.api.NamedDomainObjectContainer<com.android.build.gradle.internal.dsl.BuildType>>): kotlin.Unit { /* compiled code */ }
+
+    public open fun buildTypes(action: org.gradle.api.NamedDomainObjectContainer<com.android.build.api.dsl.ApplicationBuildType>.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun bundle(action: com.android.build.api.dsl.Bundle.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun bundle(action: org.gradle.api.Action<com.android.build.gradle.internal.dsl.BundleOptions>): kotlin.Unit { /* compiled code */ }
+
+    @org.gradle.declarative.dsl.model.annotations.Configuring public open fun compileOptions(action: com.android.build.api.dsl.CompileOptions.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun compileOptions(action: org.gradle.api.Action<com.android.build.gradle.internal.CompileOptions>): kotlin.Unit { /* compiled code */ }
+
+    public open fun compileSdkAddon(vendor: kotlin.String, name: kotlin.String, version: kotlin.Int): kotlin.Unit { /* compiled code */ }
+
+    @kotlin.Deprecated public open fun compileSdkVersion(apiLevel: kotlin.Int): kotlin.Unit { /* compiled code */ }
+
+    @kotlin.Deprecated public open fun compileSdkVersion(version: kotlin.String): kotlin.Unit { /* compiled code */ }
+
+    public open fun composeOptions(action: com.android.build.api.dsl.ComposeOptions.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun composeOptions(action: org.gradle.api.Action<com.android.build.api.dsl.ComposeOptions>): kotlin.Unit { /* compiled code */ }
+
+    public open fun dataBinding(action: com.android.build.api.dsl.DataBinding.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun dataBinding(action: org.gradle.api.Action<com.android.build.gradle.internal.dsl.DataBindingOptions>): kotlin.Unit { /* compiled code */ }
+
+    @org.gradle.declarative.dsl.model.annotations.Configuring public open fun defaultConfig(action: com.android.build.api.dsl.ApplicationDefaultConfig.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun defaultConfig(action: org.gradle.api.Action<com.android.build.gradle.internal.dsl.DefaultConfig>): kotlin.Unit { /* compiled code */ }
+
+    public open fun dependenciesInfo(action: com.android.build.api.dsl.DependenciesInfo.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun dependenciesInfo(action: org.gradle.api.Action<com.android.build.api.dsl.DependenciesInfo>): kotlin.Unit { /* compiled code */ }
+
+    public open fun externalNativeBuild(action: com.android.build.api.dsl.ExternalNativeBuild.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun externalNativeBuild(action: org.gradle.api.Action<com.android.build.gradle.internal.dsl.ExternalNativeBuild>): kotlin.Unit { /* compiled code */ }
+
+    @kotlin.Deprecated public open fun flavorDimensions(vararg dimensions: kotlin.String): kotlin.Unit { /* compiled code */ }
+
+    @org.gradle.declarative.dsl.model.annotations.Restricted public open fun getDefaultProguardFile(name: kotlin.String): java.io.File { /* compiled code */ }
+
+    public open fun installation(action: com.android.build.api.dsl.ApplicationInstallation.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun installation(action: org.gradle.api.Action<com.android.build.api.dsl.ApplicationInstallation>): kotlin.Unit { /* compiled code */ }
+
+    @org.gradle.api.Incubating @kotlin.Deprecated public open fun jacoco(action: com.android.build.api.dsl.JacocoOptions.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun jacoco(action: org.gradle.api.Action<com.android.build.gradle.internal.coverage.JacocoOptions>): kotlin.Unit { /* compiled code */ }
+
+    @org.gradle.declarative.dsl.model.annotations.Configuring public open fun lint(action: com.android.build.api.dsl.Lint.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun lint(action: org.gradle.api.Action<com.android.build.api.dsl.Lint>): kotlin.Unit { /* compiled code */ }
+
+    @org.gradle.api.Incubating @kotlin.Deprecated public open fun lintOptions(action: com.android.build.api.dsl.LintOptions.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun lintOptions(action: org.gradle.api.Action<com.android.build.gradle.internal.dsl.LintOptions>): kotlin.Unit { /* compiled code */ }
+
+    public open fun lock(): kotlin.Unit { /* compiled code */ }
+
+    public open fun packaging(action: com.android.build.api.dsl.Packaging.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun packaging(action: org.gradle.api.Action<com.android.build.api.dsl.Packaging>): kotlin.Unit { /* compiled code */ }
+
+    @kotlin.Deprecated public open fun packagingOptions(action: com.android.build.api.dsl.Packaging.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun packagingOptions(action: org.gradle.api.Action<com.android.build.gradle.internal.dsl.PackagingOptions>): kotlin.Unit { /* compiled code */ }
+
+    public open fun privacySandbox(action: com.android.build.api.dsl.PrivacySandbox.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun privacySandbox(action: org.gradle.api.Action<com.android.build.api.dsl.PrivacySandbox>): kotlin.Unit { /* compiled code */ }
+
+    public open fun productFlavors(action: org.gradle.api.Action<org.gradle.api.NamedDomainObjectContainer<com.android.build.gradle.internal.dsl.ProductFlavor>>): kotlin.Unit { /* compiled code */ }
+
+    public open fun productFlavors(action: org.gradle.api.NamedDomainObjectContainer<com.android.build.api.dsl.ApplicationProductFlavor>.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun publishing(action: com.android.build.api.dsl.ApplicationPublishing.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun publishing(action: org.gradle.api.Action<com.android.build.api.dsl.ApplicationPublishing>): kotlin.Unit { /* compiled code */ }
+
+    public open fun setAssetPacks(assetPacks: kotlin.collections.Set<kotlin.String>): kotlin.Unit { /* compiled code */ }
+
+    public open fun setDynamicFeatures(dynamicFeatures: kotlin.collections.Set<kotlin.String>): kotlin.Unit { /* compiled code */ }
+
+    public open fun setFlavorDimensions(flavorDimensions: kotlin.collections.List<kotlin.String>): kotlin.Unit { /* compiled code */ }
+
+    public open fun signingConfigs(action: org.gradle.api.Action<org.gradle.api.NamedDomainObjectContainer<com.android.build.gradle.internal.dsl.SigningConfig>>): kotlin.Unit { /* compiled code */ }
+
+    public open fun signingConfigs(action: org.gradle.api.NamedDomainObjectContainer<out com.android.build.api.dsl.ApkSigningConfig>.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun sourceSets(action: org.gradle.api.Action<org.gradle.api.NamedDomainObjectContainer<com.android.build.gradle.api.AndroidSourceSet>>): kotlin.Unit { /* compiled code */ }
+
+    public open fun sourceSets(action: org.gradle.api.NamedDomainObjectContainer<out com.android.build.api.dsl.AndroidSourceSet>.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun splits(action: com.android.build.api.dsl.Splits.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun splits(action: org.gradle.api.Action<com.android.build.gradle.internal.dsl.Splits>): kotlin.Unit { /* compiled code */ }
+
+    public open fun testCoverage(action: com.android.build.api.dsl.TestCoverage.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun testCoverage(action: org.gradle.api.Action<com.android.build.api.dsl.TestCoverage>): kotlin.Unit { /* compiled code */ }
+
+    @org.gradle.api.Incubating public open fun testFixtures(action: com.android.build.api.dsl.TestFixtures.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun testFixtures(action: org.gradle.api.Action<com.android.build.api.dsl.TestFixtures>): kotlin.Unit { /* compiled code */ }
+
+    @org.gradle.api.Incubating public open fun testOptions(action: com.android.build.api.dsl.TestOptions.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun testOptions(action: org.gradle.api.Action<com.android.build.gradle.internal.dsl.TestOptions>): kotlin.Unit { /* compiled code */ }
+
+    public open fun useLibrary(name: kotlin.String): kotlin.Unit { /* compiled code */ }
+
+    public open fun useLibrary(name: kotlin.String, required: kotlin.Boolean): kotlin.Unit { /* compiled code */ }
+
+    public open fun viewBinding(action: com.android.build.api.dsl.ViewBinding.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun viewBinding(action: org.gradle.api.Action<com.android.build.gradle.internal.dsl.ViewBindingOptionsImpl>): kotlin.Unit { /* compiled code */ }
+
+    public open fun org.gradle.api.NamedDomainObjectContainer<com.android.build.api.dsl.ApplicationBuildType>.debug(action: com.android.build.api.dsl.ApplicationBuildType.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+
+    public open fun org.gradle.api.NamedDomainObjectContainer<com.android.build.api.dsl.ApplicationBuildType>.release(action: com.android.build.api.dsl.ApplicationBuildType.() -> kotlin.Unit): kotlin.Unit { /* compiled code */ }
+}
+
